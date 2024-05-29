@@ -12,7 +12,6 @@ dbConnection()
 //app.use(express.urlencoded({extended:true}))
 //route
 //middlware for error handling
-app.use('/auth/v1',authRoute)
 app.use((err,req,res,next)=>{
     if(err)
         {
@@ -27,6 +26,7 @@ app.use((err,req,res,next)=>{
             next()
         }
 })
+app.use('/auth/v1',authRoute)
 
 app.listen(PORT,()=>{
     console.log(`backend is connected : http://127.0.0.1:${PORT}`)
