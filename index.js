@@ -1,15 +1,17 @@
 let dbConnection=require('./config/db')
 let dotenv=require('dotenv')
 let express=require('express')
+let cors=require("cors");
 const {authRoute} = require('./Route/authRoute')
 let app=express()
 let PORT=process.env.PORT || 8000
+app.use(cors());
 app.use(express.json())
 //middlware configration
 dotenv.config({})
 dbConnection()
 //for setting form data into req
-//app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({extended:true}))
 //route
 //middlware for error handling
 app.use((err,req,res,next)=>{

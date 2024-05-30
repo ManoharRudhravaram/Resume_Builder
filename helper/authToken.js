@@ -16,6 +16,24 @@ function accessTokenGenrator(userId) {
     });
   });
 }
+
+function refreshTokenVerify(token) {
+  try {
+    if (!token) return res.status(500).send({ message: "something wrong!", success: false });
+    let decode = jwt.verify(token, process.env.REFRESH_KEY);
+    if (!decode) return res.status(401).send({ message: "Unauthorized user", success: false });
+    return decode;
+  } catch (error) {
+    if (err.name == "JsonWebTokenError") {
+      return res
+        .status(500)
+        .send({ message: "user is unauthorized", sucess: false });
+    } else {
+      return res.status(500).send({ message: err.message, sucess: false });
+    }
+  }
+}
+
 function refreshTokenGenrator(userId) {
   let secret = process.env.REFRESH_KEY;
   return new Promise((res, rej) => {
@@ -33,27 +51,5 @@ function refreshTokenGenrator(userId) {
     });
   });
 }
-function verifyToken(req, res, next) {
- try {
-     let token = req.headers.authorization;
-     if (!token) {
-       return res
-         .status(401)
-         .send({ message: "Unauthrized User", success: false });
-     }
-     let decode = jwt.verify(token, process.env.ACCESS_KEY);
-     req.payload=decode
-     if (!decode) res.status(401).send({ message: "Unauthorized User" });
-     next();
- } catch (error) {
-       if(error.name=="JsonWebTokenError")
-        {
-            next( new Error('User is Unauthourized'))
-        } 
-        else
-        {
-             next(new Error(error.message)) 
-        }
- }
-}
-module.exports = { accessTokenGenrator, refreshTokenGenrator, verifyToken };
+
+module.exports = { accessTokenGenrator, refreshTokenGenrator, refreshTokenVerify };
