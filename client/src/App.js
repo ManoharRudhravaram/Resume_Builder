@@ -1,24 +1,29 @@
-import React, { useEffect } from 'react';
 import './App.css';
-import axios from 'axios';
+import react, { useEffect }  from 'react'
+import instance from './config/axios';
+import Auth from './Auth';
 function App() {
-  axios.defaults.baseURL="http://127.0.0.1:8000"
-async function print(){
-  try {
-    let result=await axios.post('auth/v1/signin',{ email:"manohar@gmail.com",
-    password:"mern@1234"});
-    console.log(result);
-  } catch (error) {
-    console.log(error);
+  async function print()
+  {
+    try{
+      let result=await instance.post('/auth/v1/signin',{email:"manohar@gmail.com",password:'mern@1234'})
+      let data= result.data;
+      localStorage.setItem('access',data.access)
+      localStorage.setItem('refresh',data.refresh)
+    }
+    catch(err)
+    {
+      console.log(err.message)
+    }
   }
-}
-useEffect(()=>{
-  print()
-},[])
+      useEffect(()=>{
+       print()
+      },[])
   return (
     <div className="App">
       <header className="App-header">
-      <div>website under maintainance</div>
+         <h1>Website under the maintenece</h1>
+         <Auth/>
       </header>
     </div>
   );
