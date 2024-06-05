@@ -14,10 +14,10 @@ function verifyToken(req, res, next) {
       next();
     } catch (error) {
       if (error.name == "JsonWebTokenError") {
-        next(new Error('User is Unauthourized'))
+        next(new Error('User is Unauthourized',401))
       }
       else {
-        next(new Error(error.message))
+        next(new Error(error.message,401))
       }
     }
   }
