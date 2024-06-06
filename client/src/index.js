@@ -9,6 +9,7 @@ import Home from './pages/Home'
 import Contact from './pages/Contact'
 import About from './pages/About'
 import Login from './pages/Login'
+import AuthContext from './contetx/AuthContext';
 let router = createBrowserRouter([{
   path: '/',
   element: <Layout />,
@@ -20,9 +21,11 @@ let router = createBrowserRouter([{
 }])
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <AuthContext>
   <RouterProvider router={router}>
     <App />
   </RouterProvider>
+  </AuthContext>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -48,9 +48,9 @@ let loginController = async (req, res, next) => {
           let accessToken = await accessTokenGenrator(availableUser.id);
           let refreshToken = await refreshTokenGenrator(availableUser.id);
           availableUser.addToken(refreshToken)
-          res.status(200).send({ access: accessToken, refresh: refreshToken });
+          res.status(200).send({ access: accessToken, refresh: refreshToken ,availableUser, success:true});
         } else {
-          res.status(500).send({ message: "Either password or email is wrong" });
+          res.status(500).send({ message: "Either password or email is wrong" ,success:false});
         }
       } else {
         return res
