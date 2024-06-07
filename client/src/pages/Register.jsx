@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import Header from "../component/layout/Header";
 import Footer from "../component/layout/Footer";
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
 function Register() {
   

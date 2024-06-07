@@ -4,7 +4,6 @@ import axios from './config/axios'
 function Auth() {
   async function protecRouteAccess() {
     let data = await axios.get('/auth/v1/token')
-    console.log(data.data)
   }
 
   return (

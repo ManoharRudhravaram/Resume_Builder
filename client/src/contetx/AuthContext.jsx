@@ -6,21 +6,23 @@ import instance from '../config/axios';
 export let authContext = createContext();
 
 function AuthContext({ children }) {
+    
     let initialState = {
         loading: false,
         data: {},
         error: ""
     }
     let [state, dispatch] = useReducer(authReducer, initialState);
-    async function loginHandler(data) {
+    async function loginHandler(arg) {
         try {
-            dispatch({ type: LOADING });
-            let response = await instance.post('/auth/v1/signin', data);
-            dispatch({ type: DATA, payload: response });
-        } catch (error) {
-            dispatch({ type: ERROR, payload: error.message });
+          dispatch({ type: LOADING });
+          let response = await instance.post("/auth/v1/signin", arg);
+          let data = await response.data;
+          dispatch({ type:DATA, payload: data });
+        } catch (err) {
+          dispatch({ type: ERROR, payload: err.response.data });
         }
-    }
+      }
     return (
         <authContext.Provider value={{ ...state, loginHandler }}>
             {children}

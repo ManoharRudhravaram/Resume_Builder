@@ -3,7 +3,6 @@ import Header from './Header';
 import Footer from './Footer'
 import { Outlet } from 'react-router-dom';
 import Aside from './Aside'
-import toast, { Toaster } from 'react-hot-toast';
 
 function Layout() {
   return (

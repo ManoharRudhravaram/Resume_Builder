@@ -14,7 +14,8 @@ let router = createBrowserRouter([{
   path: '/',
   element: <Layout />,
   children: [{ path: '', element: <Home /> },
-  { path: "/about", element: <About /> }, { path: "/contact", element: <Contact /> }]
+  { path: "/about", element: <About /> },
+  { path: "/contact", element: <Contact /> }]
 }, {
   path: "/signin",
   element: <Login />
@@ -22,9 +23,9 @@ let router = createBrowserRouter([{
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AuthContext>
-  <RouterProvider router={router}>
-    <App />
-  </RouterProvider>
+    <RouterProvider router={router}>
+      <App />
+    </RouterProvider>
   </AuthContext>
 );
 

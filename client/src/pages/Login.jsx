@@ -9,8 +9,7 @@ import { CiMail } from "react-icons/ci";
 import { CiLock } from "react-icons/ci";
 function Login() {
   let navigate = useNavigate()
-  let { loginHandler, loading, error, data } = useAuth()
-  console.log(data,error);
+  let { loginHandler, loading, error } = useAuth()
   let [formdata, setformdata] = useState({ email: "", password: "" });
   function commonHandler(e) {
     let { name, value } = e.target;
@@ -18,20 +17,14 @@ function Login() {
       return { ...pre, [name]: value }
     })
   }
-
-  async function submitHandler() {
+  function submitHandler() {
     try {
       if (!formdata.email || !formdata.password) {
         toast("All fields are required*", { icon: '⚠️' })
       }
       else {
-        await loginHandler(formdata);
-        if (data?.data.success) {
-          navigate('/')
-        }
-        else if (error) {
-          toast(error)
-        }
+        loginHandler(formdata);
+         navigate("/")
       }
     } catch (error) {
       toast.error(error.message)
@@ -39,7 +32,7 @@ function Login() {
   }
   return (
     <>
-    <Toaster/>
+      <Toaster />
       <Header />
       <main style={{ minHeight: "70vh", width: "100%" }}>
         {loading && <div className="container">
@@ -55,7 +48,7 @@ function Login() {
               <div className="col-md-5 d-flex align-items-center justify-content-center">
                 <img src="https://png.pngtree.com/png-vector/20191003/ourmid/pngtree-user-login-or-authenticate-icon-on-gray-background-flat-icon-ve-png-image_1786166.jpg" alt="user" className="img-fluid" style={{ borderRadius: "50%", height: "300px", width: "300px" }} />
               </div>
-              <div className=" text-white col-md-5 d-flex flex-column  align-items-center justify-content-evenly border" style={{ background: "linear-gradient(to bottom,#550cc9,#7938fc,#7e0ecf)" }} >
+              <div className=" text-white col-md-5 d-flex flex-column  align-items-center justify-content-evenly border" style={{ background: "linear-gradient(to bottom,#1a53ff, #99bbff,#751aff)" }} >
                 <h4>Member Login</h4>
                 <div className=" d-flex justify-content-evenly align-items-center gap-2 ">
                   <CiMail style={{ fontSize: "25px" }} />
