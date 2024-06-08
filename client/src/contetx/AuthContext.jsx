@@ -20,7 +20,7 @@ function AuthContext({ children }) {
           let data = await response.data;
           dispatch({ type:DATA, payload: data });
         } catch (err) {
-          dispatch({ type: ERROR, payload: err.response.data });
+          dispatch({ type: ERROR, payload: err.response });
         }
       }
     return (
