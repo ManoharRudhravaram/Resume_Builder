@@ -13,14 +13,18 @@ let registrationController = async (req, res, next) => {
     if (!name || !phone || !email || !password || !gender || !secret) {
       return res.status(500).send({ message: "All fields are required *" });
     } else {
+      let user = await registration.find({ email });
+      if (user) {
+        return res.status(200).send({ message: "user already registered", success: false });
+      }
       let result = await new registration({
         slug: slugify(name),
         ...req.body,
       }).save();
       if (result) {
-        res.status(201).send({ message: "Successfully Register", user: result });
+        res.status(201).send({ message: "Successfully Register", user: result, success: true });
       } else {
-        return res.status(500).send({ message: "All fields are required *" });
+        return res.status(200).send({ message: "something wrong", success: false });
       }
     }
   } catch (error) {
@@ -44,13 +48,13 @@ let loginController = async (req, res, next) => {
         );
         if (validUser) {
           //acess and refresh
-          if(availableUser.token.length>300) return res.status(400).send({message:"Max limit cross",success:false})
+          if (availableUser.token.length > 300) return res.status(400).send({ message: "Max limit cross", success: false })
           let accessToken = await accessTokenGenrator(availableUser.id);
           let refreshToken = await refreshTokenGenrator(availableUser.id);
           availableUser.addToken(refreshToken)
-          res.status(200).send({ access: accessToken, refresh: refreshToken ,data:availableUser, success:true});
+          res.status(200).send({ access: accessToken, refresh: refreshToken, data: availableUser, success: true });
         } else {
-          res.status(200).send({ message: "Either password or email is wrong" ,success:false});
+          res.status(200).send({ message: "Either password or email is wrong", success: false });
         }
       } else {
         return res
@@ -126,19 +130,19 @@ let forgetPasswordController = async (req, res, next) => {
 }
 
 //refresh controller
-let refreshTokenController=async(req,res,next)=>{
+let refreshTokenController = async (req, res, next) => {
   try {
-    let {refreshToken}=req.body;
-    if(!refreshToken) return res.status(400).send({message:"Something wrong!",success:false});
-    let verifyUser=await registration.findOne({token:{$in:[refreshToken]}});
-    if(!verifyUser) return res.status(400).send({message:"Unauthorized user",success:false});
-    let decode=await refreshTokenVerify(refreshToken);
-    req.payload=decode.aud;
-    let access=await accessTokenGenrator(decode.aud);
-    let refresh=await refreshTokenGenrator(decode.aud);
-    let result=await registration.findOneAndUpdate({token:{$in:[refreshToken]}},{$set:{"token.$":refresh}},{new:true});
-    if(!result) res.status(500).send({message:"Something wrong!",success:false});
-    res.status(200).send({refresh,access})
+    let { refreshToken } = req.body;
+    if (!refreshToken) return res.status(400).send({ message: "Something wrong!", success: false });
+    let verifyUser = await registration.findOne({ token: { $in: [refreshToken] } });
+    if (!verifyUser) return res.status(400).send({ message: "Unauthorized user", success: false });
+    let decode = await refreshTokenVerify(refreshToken);
+    req.payload = decode.aud;
+    let access = await accessTokenGenrator(decode.aud);
+    let refresh = await refreshTokenGenrator(decode.aud);
+    let result = await registration.findOneAndUpdate({ token: { $in: [refreshToken] } }, { $set: { "token.$": refresh } }, { new: true });
+    if (!result) res.status(500).send({ message: "Something wrong!", success: false });
+    res.status(200).send({ refresh, access })
   } catch (error) {
     next(error)
   }

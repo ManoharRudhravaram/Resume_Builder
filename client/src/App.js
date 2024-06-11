@@ -1,33 +1,39 @@
-import './App.css';
-import React, { useEffect }  from 'react'
-// import instance from './config/axios';
-import Auth from './Auth';
-import axios from 'axios';
+import React from 'react'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Layout from './component/layout/Layout';
+import Home from './pages/Home'
+import Contact from './pages/Contact'
+import About from './pages/About'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import AuthContext from './contetx/AuthContext';
+import Error from './pages/Error';
+import UserProtectedRoute from './component/Route/UserProtectedRoute';
+import CreateResume from './pages/user/CreateResume';
+let router = createBrowserRouter([{
+  path: '/',
+  element: <Layout />,
+  errorElement: <Error />,
+  children: [{ path: '', element: <Home /> },
+  { path: "/about", element: <About /> },
+  { path: "/contact", element: <Contact /> },
+  ]
+}, {
+  path: "/signin",
+  element: <Login />
+}, {
+  path: "/signup",
+  element: <Register />
+},
+{ path:"/create",element:<UserProtectedRoute/>,children:[{path:"",element:<CreateResume/>}]}])
+
 function App() {
-  async function print()
-  {
-    try{
-      let result=await axios.post('/auth/v1/signin',{email:"manohar@gmail.com",password:'mern@1234'})
-      let data= result.data;
-      localStorage.setItem('access',data.access)
-      localStorage.setItem('refresh',data.refresh)
-    }
-    catch(err)
-    {
-      console.log(err.message)
-    }
-  }
-      useEffect(()=>{
-       print()
-      },[])
   return (
-    <div className="App">
-      <header className="App-header">
-         <h1>Website under the maintenece</h1>
-         <Auth/>
-      </header>
-    </div>
-  );
+    <AuthContext>
+      <RouterProvider router={router}>
+      </RouterProvider>
+    </AuthContext>
+  )
 }
 
-export default App;
+export default App

@@ -3,8 +3,7 @@ import Novo from '../../Novo.jpg'
 import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../../contetx/AuthContext'
 function Header() {
-  let { data: { data } } = useAuth()
-  
+  let {data:{data}}  = useAuth()
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-info">
       <div className="container-fluid">
@@ -26,11 +25,13 @@ function Header() {
 
           </ul>
           <ul className=' navbar-nav me-5 '>
-            {!data?.name ? <li className="nav-item ms-auto">
+            {!data?.name ? 
+            <li className="nav-item ms-auto">
               <NavLink className="nav-link text-white" to="/signin">
                 Login
               </NavLink>
-            </li> : <div className="dropdown">
+            </li>
+             : <div className="dropdown">
               <button className="btn dropdown-toggle text-white" style={{ fontSize: "20px" }} type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                 {data.name}
               </button>
